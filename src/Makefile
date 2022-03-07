@@ -1,19 +1,22 @@
 CXX = g++
 
-OBJFILES = Vector3.o main.o
-CXXFLAGS = -Wall
+OBJFILES = vec3.o mat4x4.o main.o
+CXXFLAGS = -Wall -ggdb
+
 LIBFLAGS = -lm
-BINNAME = vecExec
+BINNAME = projectPart1
 
-all: vecExec
+all: matExec
 
-vecExec : main.o Vector3.o
+matExec : main.o vec3.o mat4x4.o
 	$(CXX) $(CXXFLAGS) $(LIBFLAGS) $(OBJFILES) -o $(BINNAME)
 
 main.o : main.cpp
-	$(CXX) -c main.cpp -o main.o
+	$(CXX) -c -ggdb main.cpp -o main.o
 
-Vector3.o : Vector3.cpp Vector3.h
-	$(CXX) -c Vector3.cpp -o Vector3.o
+mat4x4.o : Mat4x4/Mat4x4.cpp Mat4x4/Mat4x4.h
+	$(CXX) -c Mat4x4/Mat4x4.cpp -o mat4x4.o
+vec3.o : Vector3/Vector3.cpp Vector3/Vector3.h
+	$(CXX) -c Vector3/Vector3.cpp -o vec3.o
 clean:
 	rm -rf $(OBJFILES) $(BINNAME)

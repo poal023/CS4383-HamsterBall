@@ -1,5 +1,6 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
+#include <cmath>
 
 class Vector3{
 	public:
@@ -17,9 +18,17 @@ class Vector3{
 		friend Vector3& operator%(const Vector3& LHS, const Vector3& RHS);  // Cross Product for two vectors (assuming LHS x RHS = Resultant)
 
 		float vecMagnitude(); // Calculate the magnitude of a Vector V, ||V||. where ||V|| = sqrt(x^2 + y^2 + z^2)
-		Vector3 normalizedVec();
+		Vector3 unitVec();
 	
 };
+
+inline float Vector3::vecMagnitude(){
+	return sqrt((x * x) + (y * y) + (z * z));
+}
+
+inline Vector3 Vector3::unitVec(){
+	return Vector3((x * (1/vecMagnitude())), (y * (1/vecMagnitude())), (z * (1/vecMagnitude())));
+} 
 
 
 #endif
