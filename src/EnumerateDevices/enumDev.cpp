@@ -26,7 +26,10 @@ private:
     VkDevice dev;
 
     void createLogicalDev() {
-    
+        int count=0;
+        VkDeviceCreateInfo deviceInfo{};
+        deviceInfo.pQueueCreateInfos = &queueInfo;
+        count += sizeof(*queueInfo)/sizeof(VkDeviceQueueCreateInfo);
     }
 
     void createInstance() {
