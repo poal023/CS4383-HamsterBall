@@ -5,9 +5,34 @@
 
 
 void projectPart1();
+void projectPart2();
+
 
 int main(){
-	projectPart1();
+	//projectPart1();
+	projectPart2();
+}
+
+void projectPart2() {
+	float testArr[16] = { 4,5,1,-6,1,-2,8,3,3,-1,3,11,7,6,3,1 };
+	Mat4x4 testMat(testArr);
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			std::cout << testMat(i, j) << ' ';
+		}
+		std::cout << '\n';
+	}
+
+
+	testMat = testMat * testMat.translateMat(0, 20, 0);
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			std::cout << testMat(i, j) << ' ';
+		}
+		std::cout << '\n';
+	}
+
 }
 
 

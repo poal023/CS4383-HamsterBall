@@ -1,4 +1,4 @@
-#define GLFW_INCLUDE_VULKAN
+/*#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 
@@ -154,4 +154,4 @@ int main() {
 	HTApp app;
 	app.run();
 	return 0;
-}
+}*/
