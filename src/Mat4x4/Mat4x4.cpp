@@ -87,10 +87,10 @@ Mat4x4 Mat4x4::rotX(float degrees) {
     float radians = degrees * (M_PI / 180.0f);
     Mat4x4 TMat = identityMat();
 
-    TMat(1, 1) = cos(radians);
-    TMat(2, 2) = cos(radians);
-    TMat(2, 1) = sin(radians);
-    TMat(1, 2) = -sin(radians);
+    TMat(1, 1) = cosf(radians);
+    TMat(2, 2) = cosf(radians);
+    TMat(2, 1) = sinf(radians);
+    TMat(1, 2) = -sinf(radians);
 
     return TMat;
 
@@ -99,10 +99,10 @@ Mat4x4 Mat4x4::rotY(float degrees) {
     float radians = degrees * (M_PI  / 180.0f);
     Mat4x4 TMat = identityMat();
 
-    TMat(0, 0) = cos(radians);
-    TMat(0, 2) = cos(radians);
-    TMat(2, 1) = sin(radians);
-    TMat(2, 0) = -sin(radians);
+    TMat(0, 0) = cosf(radians);
+    TMat(0, 2) = cosf(radians);
+    TMat(2, 1) = sinf(radians);
+    TMat(2, 0) = -sinf(radians);
 
     return TMat;
 }
@@ -110,10 +110,10 @@ Mat4x4 Mat4x4::rotZ(float degrees) {
     float radians = degrees * (M_PI  / 180.0f);
     Mat4x4 TMat = identityMat();
     
-    TMat(0, 0) = cos(radians);
-    TMat(1, 1) = cos(radians);
-    TMat(1, 0) = sin(radians);
-    TMat(0, 1) = -sin(radians);
+    TMat(0, 0) = cosf(radians);
+    TMat(1, 1) = cosf(radians);
+    TMat(1, 0) = sinf(radians);
+    TMat(0, 1) = -sinf(radians);
    
     return TMat;
 }

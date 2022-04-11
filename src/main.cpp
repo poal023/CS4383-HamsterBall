@@ -72,20 +72,13 @@ void projectPart1(){
 void projectPart2(){
     Mat4x4 newMat = newMat.identityMat();
 
-    Mat4x4 trans;
-    trans(0,0)  = 1.0f;
     trans(1,1) = 4.0f;
-    trans(2,2) = 1.0f;
     //Mat4x4 scale = scale.identityMat();
-    trans = trans.scaleMat(2.0,2.0,2.0);
-    
-    //Mat4x4 rot = rot.identityMat();
+    Mat4x4 trans = trans.scaleMat(2.0,2.0,2.0);
     trans = trans * trans.rotX(45.0f);
-    
-    //Mat4x4 trans = trans.identityMat();
     trans = trans * trans.translateMat(3.0,2.0,4.0);
     newMat = trans * newMat;
-    //trans.translateMat(3.0,2.0,4.0)
+
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 4; j++){
             std::cout << trans(i,j) << ' ';
@@ -99,17 +92,15 @@ void projectPart2(){
 }
 
 void projectP2Check(){
-    //NOTE: You need to first have this matrix already has (1,4,1,1) for x,y,z and the default columns for vectors.
     
     glm::vec4 vec(0.0f, 0.0f, 0.0f, 1.0f);
     glm::mat4 trans = glm::mat4(1.0f);
-    //trans = glm::scale(trans, glm::vec3(1.0,4.0,1.0));
     trans = glm::scale(trans, glm::vec3(2.0,2.0,2.0));
     trans = glm::rotate(trans, glm::radians(45.0f), glm::vec3(1.0,0.0,0.0));
     trans = glm::translate(trans, glm::vec3(3.0f,2.0f,4.0f));
     
     vec = trans * vec;
-    //std::cout<<glm::to_string(trans)<<std::endl;
+    std::cout<<glm::to_string(vec)<<std::endl;
 
     
     
