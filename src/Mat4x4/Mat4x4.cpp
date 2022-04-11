@@ -1,5 +1,5 @@
 #include "Mat4x4.h"
-
+#include <cmath>
 Mat4x4::Mat4x4(){
    for(int i = 0; i < 16; i++){
         matVals[i] = 0;
@@ -60,8 +60,8 @@ Mat4x4 operator*(const float& scalarAmp, const Mat4x4& RHS){
     return Mat4x4(newMat);
 }
 
-Mat4x4 operator*(const Mat4x4& LHS, const float& scalarAmp){
-    return scalarAmp * LHS;
+Mat4x4 operator*(const Mat4x4& RHS, const float& scalarAmp){
+    return scalarAmp * RHS;
 }
 
 Mat4x4 operator+(const Mat4x4& LHS, const Mat4x4& RHS){
@@ -72,3 +72,58 @@ Mat4x4 operator+(const Mat4x4& LHS, const Mat4x4& RHS){
     return Mat4x4(newMatVals);
 }
 
+Mat4x4 Mat4x4::translateMat(float Tx, float Ty, float Tz) {
+    Mat4x4 TMat = identityMat();
+    
+    TMat(0, 3) = Tx;
+    TMat(1, 3) = Ty;
+    TMat(2, 3) = Tz;
+
+
+    return TMat;
+}
+
+Mat4x4 Mat4x4::rotX(float degrees) {
+    float radians = degrees * (M_PI / 180.0f);
+    Mat4x4 TMat = identityMat();
+
+    TMat(1, 1) = cos(radians);
+    TMat(2, 2) = cos(radians);
+    TMat(2, 1) = sin(radians);
+    TMat(1, 2) = -sin(radians);
+
+    return TMat;
+
+}
+Mat4x4 Mat4x4::rotY(float degrees) {
+    float radians = degrees * (M_PI  / 180.0f);
+    Mat4x4 TMat = identityMat();
+
+    TMat(0, 0) = cos(radians);
+    TMat(0, 2) = cos(radians);
+    TMat(2, 1) = sin(radians);
+    TMat(2, 0) = -sin(radians);
+
+    return TMat;
+}
+Mat4x4 Mat4x4::rotZ(float degrees) {
+    float radians = degrees * (M_PI  / 180.0f);
+    Mat4x4 TMat = identityMat();
+    
+    TMat(0, 0) = cos(radians);
+    TMat(1, 1) = cos(radians);
+    TMat(1, 0) = sin(radians);
+    TMat(0, 1) = -sin(radians);
+   
+    return TMat;
+}
+
+Mat4x4 Mat4x4::scaleMat(float Sx, float Sy, float Sz) {
+    Mat4x4 TMat = identityMat();
+    TMat(0,0) = Sx;
+    TMat(1,1) = Sy;
+    TMat(2,2) = Sz;
+    
+    return TMat;
+
+}

@@ -1,8 +1,8 @@
 #ifndef MATRIX_4x4_H
 #define MATRIX_4x4_H
 #include <cassert>
-#include <cmath>
-#define PI 3.1415926535897
+
+
 
 class Mat4x4{
     public:
@@ -18,26 +18,26 @@ class Mat4x4{
         float& operator()(const int& row, const int& col);
         friend Mat4x4 operator*(const Mat4x4& LHS, const Mat4x4& RHS);
         friend Mat4x4 operator*(const float& scalarAmp, const Mat4x4& RHS);
-        friend Mat4x4 operator*(const Mat4x4& LHS, const float& scalarAmp);
+        friend Mat4x4 operator*(const Mat4x4& RHS, const float& scalarAmp); //Make sure the matrix multiplication is communative.  
         friend Mat4x4 operator+(const Mat4x4& LHS, const Mat4x4& RHS); 
 
-        inline Mat4x4 transposeMat();
-        inline Mat4x4 identityMat();
+        Mat4x4 transposeMat();
+        Mat4x4 identityMat();
         //To do: Translate, Scale, Shear and Rotate Transforms (+ Perspective matricies, but this is what they are essentially)
         // + Inline F'ns for determinant and invert?
-	    inline float determinant();
-        inline Mat4x4 invertMat();
+        float determinant();
+        Mat4x4 invertMat();
         
-        inline Mat4x4 translateMat(float Tx, float Ty, float Tz);
-        inline Mat4x4 rotMatX(float degrees);
-        inline Mat4x4 rotMatY(float degrees);
-        inline Mat4x4 rotMatZ(float degrees);
+        Mat4x4 translateMat(float Tx, float Ty, float Tz);
+        Mat4x4 rotX(float degrees);
+        Mat4x4 rotY(float degrees);
+        Mat4x4 rotZ(float degrees);
 
-        inline Mat4x4 shearMat();
-        inline Mat4x4 scaleMat(float Sx, float Sy, float Sz);
-        
+        Mat4x4 shearMat();
+        Mat4x4 scaleMat(float Sx, float Sy, float Sz);
+
+
 };
-
 
 inline Mat4x4 Mat4x4::transposeMat(){
     Mat4x4 newMat = Mat4x4();
@@ -79,57 +79,6 @@ inline Mat4x4 Mat4x4::invertMat(){
 
     result = (1/6.0) * ((traceA * traceA * traceA) - 3*traceA2*traceA + 2*traceA3)*identityMat() + (-1/2.0)*(result)*(traceA * traceA - traceA2) + traceA * sqMat + (-1)*cubeMat;
     return (1.0 / determinant()) * result;
-}
-
-
-inline Mat4x4 Mat4x4::translateMat(float Tx, float Ty, float Tz) {
-    Mat4x4 TMat = identityMat();
-    
-    TMat(0, 3) = Tx;
-    TMat(1, 3) = Ty;
-    TMat(2, 3) = Tz;
-
-
-    return TMat;
-}
-
-inline Mat4x4 Mat4x4::rotMatX(float degrees) {
-    float radians = degrees * (PI / 180.0f);
-    Mat4x4 TMat = identityMat();
-
-    TMat(1, 1) = cos(radians);
-    TMat(2, 2) = cos(radians);
-    TMat(2, 1) = sin(radians);
-    TMat(1, 2) = -sin(radians);
-
-    return TMat;
-
-}
-inline Mat4x4 Mat4x4::rotMatY(float degrees) {
-    float radians = degrees * (PI / 180.0f);
-    Mat4x4 TMat = identityMat();
-
-    TMat(0, 0) = cos(radians);
-    TMat(0, 2) = cos(radians);
-    TMat(2, 1) = sin(radians);
-    TMat(2, 0) = -sin(radians);
-
-    return TMat;
-}
-inline Mat4x4 Mat4x4::rotMatZ(float degrees) {
-    float radians = degrees * (PI / 180.0f);
-    Mat4x4 TMat = identityMat();
-    
-    TMat(0, 0) = cos(radians);
-    TMat(1, 1) = cos(radians);
-    TMat(1, 0) = sin(radians);
-    TMat(0, 1) = -sin(radians);
-   
-    return TMat;
-}
-
-inline Mat4x4 Mat4x4::scaleMat(float Sx, float Sy, float Sz) {
-
 }
 
 
