@@ -148,6 +148,7 @@ class HTApp{
 			glfwDestroyWindow(window);
 			glfwTerminate();
 		}
+
 };
 
 int main() {
