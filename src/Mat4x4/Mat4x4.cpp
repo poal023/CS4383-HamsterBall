@@ -1,5 +1,7 @@
 #include "Mat4x4.h"
+#define _USE_MATH_DEFINES
 #include <cmath>
+
 Mat4x4::Mat4x4(){
    for(int i = 0; i < 16; i++){
         matVals[i] = 0;
