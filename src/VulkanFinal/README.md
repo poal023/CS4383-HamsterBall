@@ -5,6 +5,18 @@ Credits to [vulkan-tutorial.com](vulkan-tutorial.com) for template code.
 
 This is the directory for the Vulkan Final Project.
 
+## Dependencies
+
+Make sure you have the following dependencies:
+- GLFW3
+- GLM
+- Vulkan
+- stb_image.h
+- tinyobjloader
+
+The last two are included as part of the `includes/` directory. Credits to the respective authors.
+
+
 ## Directions
 
 Below are setup instructions for Windows. You can enable your choice of model ('cage' or 'ball') through either adding or deleting `#define BALL` on top of main.cpp
@@ -20,3 +32,7 @@ Next, also make sure you add appropriate library directories and include vulkan-
 Finally, make sure that the C++ language standard is set to C++17.
 
 Then you can compile and run!
+
+### Linux
+
+Make sure dependencies are installed beforehand and just run the makefile
