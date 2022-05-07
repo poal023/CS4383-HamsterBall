@@ -1,7 +1,7 @@
 # CS4383-HamsterBall
 Hamster Ball Project for CS4383
 
-Credits to [vulkan-tutorial.com](vulkan-tutorial.com) for template code.
+Credits to [vulkan-tutorial.com](https://vulkan-tutorial.com) for template code.
 
 This is the directory for the Vulkan Final Project.
 
