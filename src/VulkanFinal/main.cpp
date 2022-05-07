@@ -15,10 +15,6 @@
 #include <tiny_obj_loader.h>
 
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
@@ -37,8 +33,16 @@
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 
-const std::string MODEL_PATH = "models/hamster-cream.obj";
 const std::string MODEL_PATH2 = "models/ball.obj";
+
+#define BALL
+
+#ifdef BALL
+const std::string MODEL_PATH = "models/hamster-cream.obj";
+#else
+const std::string MODEL_PATH = "models/hamster-and-cage.obj";
+#endif
+
 //const std::string TEXTURE_PATH = "textures/ball-pink.png";
 const std::string TEXTURE_PATH = "textures/hamster-base3_2.png";
 
@@ -147,7 +151,7 @@ struct UniformBufferObject {
     alignas(16) glm::mat4 proj;
 };
 
-class HelloTriangleApplication {
+class VulkanProgram {
 public:
     void run() {
         initWindow();
@@ -199,6 +203,9 @@ private:
     VkBuffer indexBuffer;
     VkDeviceMemory indexBufferMemory;
 
+    std::vector<Vertex> vertices2;
+    std::vector<uint32_t> indices2;
+
     std::vector<VkBuffer> uniformBuffers;
     std::vector<VkDeviceMemory> uniformBuffersMemory;
 
@@ -219,13 +226,13 @@ private:
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-        window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+        window = glfwCreateWindow(WIDTH, HEIGHT, "CS 4383 Project", nullptr, nullptr);
         glfwSetWindowUserPointer(window, this);
         glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
     }
 
     static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
-        auto app = reinterpret_cast<HelloTriangleApplication*>(glfwGetWindowUserPointer(window));
+        auto app = reinterpret_cast<VulkanProgram*>(glfwGetWindowUserPointer(window));
         app->framebufferResized = true;
     }
 
@@ -246,8 +253,10 @@ private:
         createTextureImage();
         createTextureImageView();
         createTextureSampler();
-        loadModel();
-        //loadModel2();
+        loadModel(MODEL_PATH);
+        #ifdef BALL
+        loadModel(MODEL_PATH2); //give option of "cage" or ball 
+        #endif
         createVertexBuffer();
         createIndexBuffer();
         createUniformBuffers();
@@ -359,7 +368,7 @@ private:
 
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = "Hello Triangle";
+        appInfo.pApplicationName = "CS 4383 Application";
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "No Engine";
         appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
@@ -631,8 +640,8 @@ private:
     }
 
     void createGraphicsPipeline() {
-        auto vertShaderCode = readFile("shaders/vert.spv");
-        auto fragShaderCode = readFile("shaders/frag.spv");
+        auto vertShaderCode = readFile("Shaders/vert.spv");
+        auto fragShaderCode = readFile("Shaders/frag.spv");
 
         VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
         VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -1017,16 +1026,13 @@ private:
         endSingleTimeCommands(commandBuffer);
     }
 
-    void loadModel() {
+    void loadModel(const std::string modelFp) {
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
         std::string warn, err;
 
-        Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(MODEL_PATH, aiProcess_Triangulate | aiProcess_FlipUVs);
-
-        if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, MODEL_PATH.c_str())) {
+        if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, modelFp.c_str())) {
             throw std::runtime_error(warn + err);
         }
 
@@ -1065,8 +1071,7 @@ private:
         std::vector<tinyobj::material_t> materials;
         std::string warn, err;
 
-        Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(MODEL_PATH, aiProcess_Triangulate | aiProcess_FlipUVs);
+  
 
         if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, MODEL_PATH2.c_str())) {
             throw std::runtime_error(warn + err);
@@ -1093,10 +1098,10 @@ private:
 
                 if (uniqueVertices.count(vertex) == 0) {
                     uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
-                    vertices.push_back(vertex);
+                    vertices2.push_back(vertex);
                 }
 
-                indices.push_back(uniqueVertices[vertex]);
+                indices2.push_back(uniqueVertices[vertex]);
             }
         }
     }
@@ -1386,7 +1391,7 @@ private:
         ubo.model = glm::rotate(glm::mat4(1.0f), glm::radians(135.0f), glm::vec3(0.0, 0.0, 1.0));
         ubo.model = glm::rotate(ubo.model, time * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         ubo.model = glm::translate(ubo.model, glm::vec3(0.0f, -1.0f, 0.0f));
-        //ubo.model = glm::scale(ubo.model, glm::vec3(0.5, 0.5, 0.5));
+        ubo.model = glm::scale(ubo.model, glm::vec3(0.5*sin(time) + 0.5));
         ubo.view = glm::lookAt(glm::vec3(sin(time) * 2.0f, 2.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
         ubo.proj = glm::perspective(glm::radians(45.0f), swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 10.0f);
         ubo.proj[1][1] *= -1;
@@ -1671,10 +1676,10 @@ private:
 };
 
 int main() {
-    HelloTriangleApplication app;
+    VulkanProgram vp;
 
     try {
-        app.run();
+        vp.run();
     }
     catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
